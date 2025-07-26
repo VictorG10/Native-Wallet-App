@@ -2,7 +2,7 @@ import express from "express";
 import logger from "./middleware/logger.js";
 import transactions from "./routes/transactions.route.js";
 import ratelimiter from "./middleware/rateLimiter.js";
-import { initDB } from "../config/db.js";
+import { initDB } from "./config/db.js";
 
 const Port = process.env.PORT || 8081;
 
