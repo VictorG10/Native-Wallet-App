@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "Expense Tracker Wallet",
+    "slug": "wallet",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "mobile",
+    "scheme": "wallet",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
