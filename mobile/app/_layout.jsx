@@ -5,8 +5,6 @@ import { tokenCache } from "@clerk/clerk-expo/token-cache";
 import { Slot } from "expo-router";
 
 export default function RootLayout() {
-  // 2:14:20
-
   return (
     <ClerkProvider tokenCache={tokenCache}>
       <SafeScreen>
