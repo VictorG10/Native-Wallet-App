@@ -1,9 +1,21 @@
+import { styles } from "@/assets/styles/home.style";
+import BalanceCard from "@/components/BalanceCard";
+import PageLoader from "@/components/PageLoader";
 import { SignOutButton } from "@/components/SignOutButton";
+import TransactionCard from "@/components/TransactionCard";
 import { useTransactions } from "@/hooks/useTransactions";
 import { SignedIn, SignedOut, useUser } from "@clerk/clerk-expo";
-import { Link } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Link, router } from "expo-router";
 import { useEffect } from "react";
-import { Text, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Page() {
   const { user } = useUser();
@@ -15,27 +27,76 @@ export default function Page() {
     loadData();
   }, [loadData]);
 
-  console.log("userId", user.id);
+  // console.log("userId", user.id);
   console.log("transaction:", transactions);
-  console.log("summary:", summary);
+  // console.log("summary:", summary);
+
+  if (isLoading) return <PageLoader />;
+
+  const handleDelete = (id) => {
+    Alert.alert(
+      "Delete Transactions",
+      "Are you sure you want to delete this transactions?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => deleteTransaction(id),
+        },
+      ]
+    );
+  };
+
+  // 3:25:00
 
   return (
-    <View>
-      <SignedIn>
-        <Text>Hello {user?.emailAddresses[0].emailAddress}</Text>
-        <Text>Income:{summary.income}</Text>
-        <Text>Balance: {summary.balance}</Text>
-        <Text>Expenses: {summary.expenses}</Text>
-        <SignOutButton />
-      </SignedIn>
-      <SignedOut>
-        <Link href="/(auth)/sign-in">
-          <Text>Sign in</Text>
-        </Link>
-        <Link href="/(auth)/sign-up">
-          <Text>Sign up</Text>
-        </Link>
-      </SignedOut>
+    <View style={styles.container}>
+      <View style={styles.content}>
+        <View style={styles.header}>
+          {/* Header Left */}
+          <View style={styles.headerLeft}>
+            <Image
+              style={styles.headerLogo}
+              source={require("../../assets/images/logo.png")}
+              resizeMode="contain"
+            />
+            <View style={styles.welcomeContainer}>
+              <Text style={styles.welcomeText}>Welcome,</Text>
+              <Text style={styles.usernameText}>
+                {user?.emailAddresses[0]?.emailAddress.split("@")[0]}
+              </Text>
+            </View>
+          </View>
+
+          {/* Header Right */}
+          <View style={styles.headerRight}>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => router.push("/create")}
+            >
+              <Ionicons name="add" size={20} color={"#fff"} />
+              <Text style={styles.addButtonText}>Add</Text>
+            </TouchableOpacity>
+            <SignOutButton />
+          </View>
+        </View>
+
+        <BalanceCard summary={summary} />
+
+        <View style={styles.transactionsHeaderContainer}>
+          <Text style={styles.sectionTitle}>Recent Transactions</Text>
+        </View>
+
+        <FlatList
+          style={styles.transactionsList}
+          contentContainerStyle={styles.transactionContent}
+          data={transactions}
+          renderItem={({ item }) => (
+            <TransactionCard item={item} onDelete={handleDelete} />
+          )}
+        />
+      </View>
     </View>
   );
 }
