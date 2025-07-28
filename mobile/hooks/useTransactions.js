@@ -14,7 +14,9 @@ export const useTransactions = (userId) => {
   const fetchTransactions = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/transactions/${userId}`);
-      const data = await response.json();
+      const text = await response.text();
+      //   const data = await response.json();
+      const data = JSON.parse(text);
       setTransactions(data);
     } catch (error) {
       console.error("Error fetching transactions:", error);
@@ -24,7 +26,9 @@ export const useTransactions = (userId) => {
   const fetchSummary = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/transactions/summary/${userId}`);
-      const data = await response.json();
+      const text = await response.text();
+      //   const data = await response.json();
+      const data = JSON.parse(text);
       setSummary(data);
     } catch (error) {
       console.error("Error fetching transactions summary:", error);
