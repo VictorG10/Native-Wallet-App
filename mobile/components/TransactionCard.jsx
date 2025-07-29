@@ -8,7 +8,7 @@ import { formatDate } from "@/libs/utils";
 const CATEGORY_ICONS = {
   "Food & Drinks": "fast-food",
   Shopping: "cart",
-  Transportation: "car",
+  Transportation: "car-sport",
   Entertainment: "film",
   Bills: "receipt",
   Income: "cash",
