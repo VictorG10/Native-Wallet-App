@@ -48,8 +48,6 @@ export default function Page() {
     );
   };
 
-  // 3:25:00
-
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -87,16 +85,17 @@ export default function Page() {
         <View style={styles.transactionsHeaderContainer}>
           <Text style={styles.sectionTitle}>Recent Transactions</Text>
         </View>
-
-        <FlatList
-          style={styles.transactionsList}
-          contentContainerStyle={styles.transactionContent}
-          data={transactions}
-          renderItem={({ item }) => (
-            <TransactionCard item={item} onDelete={handleDelete} />
-          )}
-        />
       </View>
+
+      <FlatList
+        style={styles.transactionsList}
+        contentContainerStyle={styles.transactionsListContent}
+        data={transactions}
+        renderItem={({ item }) => (
+          <TransactionCard item={item} onDelete={handleDelete} />
+        )}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 }
