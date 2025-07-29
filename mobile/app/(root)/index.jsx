@@ -1,5 +1,6 @@
 import { styles } from "@/assets/styles/home.style";
 import BalanceCard from "@/components/BalanceCard";
+import NoTransaction from "@/components/NoTransaction";
 import PageLoader from "@/components/PageLoader";
 import { SignOutButton } from "@/components/SignOutButton";
 import TransactionCard from "@/components/TransactionCard";
@@ -7,7 +8,8 @@ import { useTransactions } from "@/hooks/useTransactions";
 import { SignedIn, SignedOut, useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { RefreshControl } from "react-native";
 import {
   Alert,
   FlatList,
@@ -19,9 +21,16 @@ import {
 
 export default function Page() {
   const { user } = useUser();
+  const [refreshing, setRefreshing] = useState(false);
 
   const { transactions, summary, isLoading, loadData, deleteTransaction } =
     useTransactions(user.id);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadData();
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     loadData();
@@ -31,7 +40,7 @@ export default function Page() {
   console.log("transaction:", transactions);
   // console.log("summary:", summary);
 
-  if (isLoading) return <PageLoader />;
+  if (isLoading && !refreshing) return <PageLoader />;
 
   const handleDelete = (id) => {
     Alert.alert(
@@ -95,6 +104,11 @@ export default function Page() {
           <TransactionCard item={item} onDelete={handleDelete} />
         )}
         keyExtractor={(item) => item.id}
+        ListEmptyComponent={<NoTransaction />}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );
