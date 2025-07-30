@@ -8,6 +8,17 @@ export const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
   },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: COLORS.background,
+  },
+
+  inner: {
+    flex: 1,
+    justifyContent: "center",
+  },
   illustration: {
     width: 300,
     height: 310,
